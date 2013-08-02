@@ -35,7 +35,7 @@
 
 /** \author Mrinal Kalakrishnan */
 
-#include <roscpp_utilities/param.h>
+#include <roscpp_utilities/param_server.h>
 
 namespace roscpp_utilities
 {
