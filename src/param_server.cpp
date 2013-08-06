@@ -72,9 +72,9 @@ bool getParam(XmlRpc::XmlRpcValue& config,
   array.resize(size);
   for (int i=0; i<size; ++i)
   {
-    if (!getParam(config[i], array[i], verbose, ns))
+    if (!getParam(config[i], static_cast<T&>(array[i]), verbose, ns))
     {
-      ROS_ERROR_COND(verbose, "Error reading parameter %s[%d], ns.c_str(), i");
+      ROS_ERROR_COND(verbose, "Error reading parameter %s[%d]", ns.c_str(), i);
       return false;
     }
   }
@@ -376,5 +376,31 @@ std::string getString(const int number)
   ss << number;
   return ss.str();
 }
+
+// create specific instantiations of templated functions, for the types that we know will work
+
+#define DEFINE_PS_SPECIALIZATIONS(PS_TYPE) \
+    template bool getParam<PS_TYPE>(XmlRpc::XmlRpcValue& config, const std::string& key, PS_TYPE& value, const bool verbose, const std::string& ns);\
+    template bool getParam<std::vector<PS_TYPE> >(XmlRpc::XmlRpcValue& config, const std::string& key, std::vector<PS_TYPE>& value, const bool verbose, const std::string& ns);\
+    template bool getParam<PS_TYPE>(XmlRpc::XmlRpcValue& config, std::vector<PS_TYPE>& array, const bool verbose, const std::string& ns); \
+    template bool read<PS_TYPE>(ros::NodeHandle& node_handle, const std::string& parameter_name, PS_TYPE& value, const bool verbose); \
+    template bool read<std::vector<PS_TYPE> >(ros::NodeHandle& node_handle, const std::string& parameter_name, std::vector<PS_TYPE>& value, const bool verbose); \
+    template void require<PS_TYPE>(ros::NodeHandle& node_handle, const std::string& parameter_name, PS_TYPE& value); \
+    template void require<std::vector<PS_TYPE> >(ros::NodeHandle& node_handle, const std::string& parameter_name, std::vector<PS_TYPE>& value); \
+
+DEFINE_PS_SPECIALIZATIONS(int)
+DEFINE_PS_SPECIALIZATIONS(double)
+DEFINE_PS_SPECIALIZATIONS(std::string)
+DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Point)
+DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Vector3)
+DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Quaternion)
+DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Pose)
+DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Wrench)
+
+// specialize separately for bool because std::vector<bool> is non-standard. Grrr....
+template bool getParam<bool>(XmlRpc::XmlRpcValue& config, const std::string& key, bool& value, const bool verbose, const std::string& ns);
+template bool read<bool>(ros::NodeHandle& node_handle, const std::string& parameter_name, bool& value, const bool verbose);
+template void require<bool>(ros::NodeHandle& node_handle, const std::string& parameter_name, bool& value);
+
 
 } // namespace roscpp_utilities

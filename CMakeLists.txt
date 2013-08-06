@@ -12,6 +12,7 @@ catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS roscpp geometry_msgs
   DEPENDS Eigen
+  LIBRARIES ${PROJECT_NAME}
 )
 
 include_directories(
