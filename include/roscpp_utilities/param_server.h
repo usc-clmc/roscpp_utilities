@@ -56,6 +56,10 @@ namespace roscpp_utilities
 
 // basic function overloaded for different types
 bool getParam(XmlRpc::XmlRpcValue& config, int& value, const bool verbose=false, const std::string& ns="N/A");
+bool getParam(XmlRpc::XmlRpcValue& config, long& value, const bool verbose=false, const std::string& ns="N/A");
+bool getParam(XmlRpc::XmlRpcValue& config, unsigned int& value, const bool verbose=false, const std::string& ns="N/A");
+bool getParam(XmlRpc::XmlRpcValue& config, unsigned long& value, const bool verbose=false, const std::string& ns="N/A");
+bool getParam(XmlRpc::XmlRpcValue& config, float& value, const bool verbose=false, const std::string& ns="N/A");
 bool getParam(XmlRpc::XmlRpcValue& config, double& value, const bool verbose=false, const std::string& ns="N/A");
 bool getParam(XmlRpc::XmlRpcValue& config, bool& value, const bool verbose=false, const std::string& ns="N/A");
 bool getParam(XmlRpc::XmlRpcValue& config, std::string& value, const bool verbose=false, const std::string& ns="N/A");

@@ -124,6 +124,36 @@ bool getParam(XmlRpc::XmlRpcValue& config, int& value, const bool verbose, const
   return true;
 }
 
+bool getParam(XmlRpc::XmlRpcValue& config, long& value, const bool verbose, const std::string& ns)
+{
+  int int_value;
+  if (!getParam(config, int_value, verbose, ns))
+    return false;
+
+  value = int_value;
+  return true;
+}
+
+bool getParam(XmlRpc::XmlRpcValue& config, unsigned long& value, const bool verbose, const std::string& ns)
+{
+  int int_value;
+  if (!getParam(config, int_value, verbose, ns))
+    return false;
+
+  value = int_value;
+  return true;
+}
+
+bool getParam(XmlRpc::XmlRpcValue& config, unsigned int& value, const bool verbose, const std::string& ns)
+{
+  int int_value;
+  if (!getParam(config, int_value, verbose, ns))
+    return false;
+
+  value = int_value;
+  return true;
+}
+
 bool getParam(XmlRpc::XmlRpcValue& config, double& value, const bool verbose, const std::string& ns)
 {
   if (config.getType() == XmlRpc::XmlRpcValue::TypeDouble)
@@ -136,6 +166,16 @@ bool getParam(XmlRpc::XmlRpcValue& config, double& value, const bool verbose, co
     return false;
   }
 
+  return true;
+}
+
+bool getParam(XmlRpc::XmlRpcValue& config, float& value, const bool verbose, const std::string& ns)
+{
+  double double_value;
+  if (!getParam(config, double_value, verbose, ns))
+    return false;
+
+  value = double_value;
   return true;
 }
 
@@ -401,6 +441,10 @@ std::string getString(const int number)
     template void require<std::vector<PS_TYPE> >(ros::NodeHandle& node_handle, const std::string& parameter_name, std::vector<PS_TYPE>& value); \
 
 DEFINE_PS_SPECIALIZATIONS(int)
+DEFINE_PS_SPECIALIZATIONS(long)
+DEFINE_PS_SPECIALIZATIONS(unsigned int)
+DEFINE_PS_SPECIALIZATIONS(unsigned long)
+DEFINE_PS_SPECIALIZATIONS(float)
 DEFINE_PS_SPECIALIZATIONS(double)
 DEFINE_PS_SPECIALIZATIONS(std::string)
 DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Point)
