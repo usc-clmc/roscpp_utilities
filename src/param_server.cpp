@@ -319,6 +319,18 @@ bool getParam(XmlRpc::XmlRpcValue& config, geometry_msgs::Wrench& wrench, const 
   return false;
 }
 
+bool getParam(XmlRpc::XmlRpcValue& config, Eigen::VectorXd& vector, const bool verbose, const std::string& ns)
+{
+  std::vector<double> array;
+  if (!getParam(config, array, verbose, ns))
+    return false;
+
+  vector=Eigen::VectorXd(array.size());
+  for (size_t i=0; i<array.size(); ++i)
+    vector(i) = array[i];
+  return true;
+}
+
 // legacy functions
 
 void tokenizeString(const std::string& str_array, std::vector<std::string>& array)
@@ -396,6 +408,7 @@ DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Vector3)
 DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Quaternion)
 DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Pose)
 DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Wrench)
+DEFINE_PS_SPECIALIZATIONS(Eigen::VectorXd)
 
 // specialize separately for bool because std::vector<bool> is non-standard. Grrr....
 template bool getParam<bool>(XmlRpc::XmlRpcValue& config, const std::string& key, bool& value, const bool verbose, const std::string& ns);
