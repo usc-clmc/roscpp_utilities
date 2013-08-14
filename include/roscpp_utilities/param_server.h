@@ -102,6 +102,8 @@ void appendLeadingSlash(std::string& name);
 void appendTrailingSlash(std::string& directory_name);
 void removeLeadingSlash(std::string& topic_name);
 std::string getString(const int number);
+bool write(ros::NodeHandle& node_handle, const std::string& key,
+           const std::vector<std::string>& str_array, const bool verbose=true);
 
 } // namespace roscpp_utilities
 #endif /* ROSCPP_UTILITIES_PARAM_H */

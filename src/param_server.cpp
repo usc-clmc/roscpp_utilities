@@ -429,6 +429,25 @@ std::string getString(const int number)
   return ss.str();
 }
 
+bool write(ros::NodeHandle& node_handle, const std::string& key,
+                  const std::vector<std::string>& str_array, const bool verbose)
+{
+  std::string xml_string;
+  xml_string.append("<value><array><data>");
+  for (unsigned int i = 0; i < str_array.size(); ++i)
+  {
+    xml_string.append("<value><string>" + str_array[i] + "</string></value>");
+  }
+  xml_string.append("</data></array></value>");
+  XmlRpc::XmlRpcValue list;
+  int offset = 0;
+  list.fromXml(xml_string, &offset);
+  ROS_ASSERT(list.valid());
+  ROS_ASSERT(list.getType() == XmlRpc::XmlRpcValue::TypeArray);
+  node_handle.setParam(key, list);
+  return true;
+}
+
 // create specific instantiations of templated functions, for the types that we know will work
 
 #define DEFINE_PS_SPECIALIZATIONS(PS_TYPE) \
