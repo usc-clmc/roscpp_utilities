@@ -69,6 +69,7 @@ bool getParam(XmlRpc::XmlRpcValue& config, geometry_msgs::Quaternion& value, con
 bool getParam(XmlRpc::XmlRpcValue& config, geometry_msgs::Pose& value, const bool verbose=false, const std::string& ns="N/A");
 bool getParam(XmlRpc::XmlRpcValue& config, geometry_msgs::Wrench& value, const bool verbose=false, const std::string& ns="N/A");
 bool getParam(XmlRpc::XmlRpcValue& config, Eigen::VectorXd& value, const bool verbose=false, const std::string& ns="N/A");
+bool getParam(XmlRpc::XmlRpcValue& config, Eigen::MatrixXd& value, const bool verbose=false, const std::string& ns="N/A");
 
 // different kinds of convenient templated forms
 template<class T>

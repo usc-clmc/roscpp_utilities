@@ -371,6 +371,37 @@ bool getParam(XmlRpc::XmlRpcValue& config, Eigen::VectorXd& vector, const bool v
   return true;
 }
 
+bool getParam(XmlRpc::XmlRpcValue& config, Eigen::MatrixXd& matrix, const bool verbose, const std::string& ns)
+{
+  std::vector<Eigen::VectorXd> array;
+
+  if (!getParam(config, array, verbose, ns))
+    return false;
+
+  if (array.size() < 1)
+  {
+    ROS_ERROR_COND(verbose, "Parameter %s had no rows", ns.c_str());
+    return false;
+  }
+
+  // check row sizes
+  int num_columns = array[0].rows();
+  for (size_t i=1; i<array.size(); ++i)
+  {
+    if (array[i].rows() != num_columns)
+    {
+      ROS_ERROR_COND(verbose, "Parameter %s had mismatching row sizes", ns.c_str());
+      return false;
+    }
+  }
+
+  matrix = Eigen::MatrixXd(array.size(), num_columns);
+
+  for (size_t i=0; i<array.size(); ++i)
+    matrix.row(i) = array[i].transpose();
+  return true;
+}
+
 // legacy functions
 
 void tokenizeString(const std::string& str_array, std::vector<std::string>& array)
@@ -472,6 +503,7 @@ DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Quaternion)
 DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Pose)
 DEFINE_PS_SPECIALIZATIONS(geometry_msgs::Wrench)
 DEFINE_PS_SPECIALIZATIONS(Eigen::VectorXd)
+DEFINE_PS_SPECIALIZATIONS(Eigen::MatrixXd)
 
 // specialize separately for bool because std::vector<bool> is non-standard. Grrr....
 template bool getParam<bool>(XmlRpc::XmlRpcValue& config, const std::string& key, bool& value, const bool verbose, const std::string& ns);
